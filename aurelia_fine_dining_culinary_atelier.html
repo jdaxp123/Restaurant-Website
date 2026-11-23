@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURELIA — Taste the Art of Fine Dining</title>
+
+  <!-- Google Fonts: Cormorant Garamond (Editorial Display), Plus Jakarta Sans (Clean UI), JetBrains Mono (Accents/Timer) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration & Design Tokens -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            charcoal: {
+              950: '#0C0A09',
+              900: '#14110F',
+              800: '#1E1916',
+              700: '#2A231E',
+              600: '#3B312B',
+            },
+            cream: {
+              100: '#FAF5EC',
+              200: '#F2E8D8',
+              300: '#E5D5BE',
+              400: '#CBB698',
+            },
+            gold: {
+              400: '#FBBF24',
+              500: '#E5A93C',
+              600: '#C68B24',
+            },
+            ember: {
+              400: '#FB923C',
+              500: '#EA580C',
+              600: '#C2410C',
+            }
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            'glow-gold': '0 0 28px rgba(229, 169, 60, 0.35)',
+            'glow-ember': '0 0 28px rgba(234, 88, 12, 0.35)',
+            'luxury': '0 24px 60px -15px rgba(0, 0, 0, 0.65)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom CSS3 Animations, Glassmorphism, Parallax & Reduced Motion Support -->
+  <style>
+    :root {
+      --bg-primary: #14110F;
+      --bg-elevated: #1E1916;
+      --text-primary: #FAF5EC;
+      --text-muted: #CBB698;
+      --accent-gold: #E5A93C;
+      --accent-ember: #EA580C;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Subtle grain overlay for tactile fine-dining atmosphere */
+    .noise-overlay {
+      background-image: radial-gradient(rgba(250, 245, 236, 0.04) 1px, transparent 0);
+      background-size: 28px 28px;
+    }
+
+    /* Glassmorphism utility classes */
+    .glass-panel {
+      background: rgba(30, 25, 22, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(229, 169, 60, 0.18);
+    }
+
+    .glass-nav-scrolled {
+      background: rgba(12, 10, 9, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(229, 169, 60, 0.2);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Hero Text Reveal Animation */
+    @keyframes heroRevealUp {
+      0% {
+        opacity: 0;
+        transform: translateY(34px);
+        filter: blur(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    .animate-hero-reveal {
+      opacity: 0;
+      animation: heroRevealUp 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .delay-100 { animation-delay: 0.12s; }
+    .delay-200 { animation-delay: 0.26s; }
+    .delay-300 { animation-delay: 0.4s; }
+    .delay-400 { animation-delay: 0.55s; }
+
+    /* Floating Food Elements Animation */
+    @keyframes floatSlow {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-14px) rotate(2.5deg);
+      }
+    }
+
+    @keyframes floatReverse {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(12px) rotate(-2deg);
+      }
+    }
+
+    .animate-float-slow {
+      animation: floatSlow 6s ease-in-out infinite;
+    }
+
+    .animate-float-reverse {
+      animation: floatReverse 7.2s ease-in-out infinite;
+    }
+
+    /* Scroll Indicator Pulse */
+    @keyframes scrollDrop {
+      0% {
+        transform: translateY(-6px);
+        opacity: 0.25;
+      }
+      50% {
+        transform: translateY(6px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-6px);
+        opacity: 0.25;
+      }
+    }
+
+    .animate-scroll-drop {
+      animation: scrollDrop 2s ease-in-out infinite;
+    }
+
+    /* Scroll Reveal Classes (Triggered via IntersectionObserver) */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Food Image Hover Zoom & Image Reveal */
+    .food-card-img {
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .food-card:hover .food-card-img {
+      transform: scale(1.08);
+    }
+
+    /* Glowing Button Sheen */
+    .btn-glow {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    }
+
+    .btn-glow::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 65%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+      transform: skewX(-22deg);
+      transition: left 0.65s ease;
+    }
+
+    .btn-glow:hover::before {
+      left: 140%;
+    }
+
+    /* Nav Link Underline Animation */
+    .nav-link-underline {
+      position: relative;
+    }
+
+    .nav-link-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, #E5A93C, #EA580C);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link-underline:hover::after,
+    .nav-link-underline.active::after {
+      width: 100%;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0C0A09;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3B312B;
+      border-radius: 9999px;
+      border: 2px solid #0C0A09;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #E5A93C;
+    }
+
+    /* Respect Reduced Motion Accessibility Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal-item {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .animate-hero-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-gold-500 selection:text-charcoal-950 noise-overlay">
+
+  <!-- =====================================================================
+       1. NAVIGATION HEADER & ANIMATED MOBILE MENU
+       ===================================================================== -->
+  <header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#hero" class="flex items-center gap-3 group focus:outline-none">
+        <span class="w-10 h-10 rounded-full bg-gradient-to-br from-gold-400 via-gold-500 to-ember-500 flex items-center justify-center text-charcoal-950 font-serif font-bold text-xl shadow-glow-gold transition-transform duration-300 group-hover:scale-105">
+          A
+        </span>
+        <div>
+          <span class="block font-serif text-2xl sm:text-3xl font-bold tracking-wider text-cream-100 leading-none">
+            AURELIA
+          </span>
+          <span class="block text-[10px] uppercase tracking-[0.28em] text-gold-400 mt-0.5">
+            Culinary Atelier
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-cream-200" aria-label="Primary Navigation">
+        <a href="#about" class="nav-link-underline hover:text-gold-400 transition-colors">About</a>
+        <a href="#menu" class="nav-link-underline hover:text-gold-400 transition-colors">Menu</a>
+        <a href="#offers" class="nav-link-underline hover:text-gold-400 transition-colors">Offers</a>
+        <a href="#specials" class="nav-link-underline hover:text-gold-400 transition-colors">Specials</a>
+        <a href="#reviews" class="nav-link-underline hover:text-gold-400 transition-colors">Reviews</a>
+        <a href="#gallery" class="nav-link-underline hover:text-gold-400 transition-colors">Gallery</a>
+        <a href="#contact" class="nav-link-underline hover:text-gold-400 transition-colors">Contact</a>
+      </nav>
+
+      <!-- Desktop CTA & Mobile Hamburger Toggle -->
+      <div class="flex items-center gap-3">
+        <button id="orderBagBtn" type="button" aria-label="View Order Summary" class="relative p-2.5 rounded-full glass-panel text-cream-100 hover:text-gold-400 hover:border-gold-400/50 transition-all cursor-pointer">
+          <i class="fa-solid fa-utensils text-sm"></i>
+          <span id="orderCountBadge" class="hidden absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-ember-500 text-white text-[11px] font-bold flex items-center justify-center">
+            0
+          </span>
+        </button>
+
+        <a href="#reservation" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 font-semibold text-sm btn-glow shadow-glow-gold">
+          <span>Book Table</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+
+        <button id="mobileMenuBtn" type="button" aria-label="Toggle Menu" aria-expanded="false" class="lg:hidden p-2.5 rounded-xl glass-panel text-cream-100 hover:text-gold-400 transition-colors cursor-pointer">
+          <i id="mobileMenuIcon" class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Animated Mobile Navigation Drawer -->
+    <div id="mobileMenu" class="lg:hidden max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-charcoal-950/95 backdrop-blur-xl border-b border-gold-500/15">
+      <div class="px-6 py-6 flex flex-col gap-4 text-cream-100">
+        <a href="#about" class="mobile-nav-link py-2 border-b border-charcoal-700/60 hover:text-gold-400 transition-colors">About Our Restaurant</a>
+        <a href="#menu" class="mobile-nav-link py-2 border-b border-charcoal-700/60 hover:text-gold-400 transition-colors">Food Menu</a>
+        <a href="#offers" class="mobile-nav-link py-2 border-b border-charcoal-700/60 hover:text-gold-400 transition-colors">Special Offers</a>
+        <a href="#specials" class="mobile-nav-link py-2 border-b border-charcoal-700/60 hover:text-gold-400 transition-colors">Signature Specials</a>
+        <a href="#reviews" class="mobile-nav-link py-2 border-b border-charcoal-700/60 hover:text-gold-400 transition-colors">Customer Reviews</a>
+        <a href="#gallery" class="mobile-nav-link py-2 border-b border-charcoal-700/60 hover:text-gold-400 transition-colors">Gallery</a>
+        <a href="#contact" class="mobile-nav-link py-2 border-b border-charcoal-700/60 hover:text-gold-400 transition-colors">Contact & Location</a>
+        <a href="#reservation" class="mobile-nav-link mt-2 w-full text-center py-3 rounded-full bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 font-bold">
+          Reserve Your Table
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       2. HERO SECTION
+       ===================================================================== -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <!-- Parallax Background Food Photography -->
+    <div id="heroParallaxBg" class="absolute inset-0 scale-105 will-change-transform">
+      <img
+        src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=85"
+        alt="Fine dining seared steak and culinary plating at Aurelia"
+        onerror="this.src='https://placehold.co/1920x1080/14110F/E5A93C?text=AURELIA+Fine+Dining'"
+        class="w-full h-full object-cover object-center"
+      />
+      <!-- Rich Dark Charcoal & Warm Gradient Overlay for High Contrast Legibility -->
+      <div class="absolute inset-0 bg-gradient-to-b from-charcoal-950/80 via-charcoal-950/65 to-charcoal-950"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-charcoal-950/75 via-transparent to-ember-900/20"></div>
+    </div>
+
+    <!-- Subtle Floating Culinary Elements (Desktop & Tablet Accents) -->
+    <div class="hidden md:block absolute top-28 right-8 lg:right-16 z-10 animate-float-slow pointer-events-none">
+      <div class="glass-panel p-2.5 rounded-2xl shadow-luxury w-36 lg:w-44">
+        <img
+          src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=500&q=80"
+          alt="Artisanal plated gourmet dish"
+          onerror="this.src='https://placehold.co/300x200/1E1916/E5A93C?text=Gourmet+Plate'"
+          class="w-full h-24 lg:h-28 object-cover rounded-xl"
+        />
+        <div class="pt-2 px-1 flex items-center justify-between text-[11px]">
+          <span class="text-cream-200 font-medium truncate">Truffle Risotto</span>
+          <span class="text-gold-400 font-mono">$34</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hidden lg:block absolute bottom-28 left-12 z-10 animate-float-reverse pointer-events-none">
+      <div class="glass-panel p-2.5 rounded-2xl shadow-luxury w-44">
+        <img
+          src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=500&q=80"
+          alt="Crafted smoked citrus cocktail"
+          onerror="this.src='https://placehold.co/300x200/1E1916/FB923C?text=Signature+Cocktail'"
+          class="w-full h-28 object-cover rounded-xl"
+        />
+        <div class="pt-2 px-1 flex items-center justify-between text-[11px]">
+          <span class="text-cream-200 font-medium truncate">Amber Old Fashioned</span>
+          <span class="text-ember-400 font-mono">$19</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Center Content -->
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center py-12">
+      <div class="animate-hero-reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel text-gold-400 text-xs sm:text-sm font-medium tracking-widest uppercase mb-6">
+        <i class="fa-solid fa-sparkles text-ember-400"></i>
+        <span>Seasonal Tasting &amp; Wood-Fired Kitchen</span>
+      </div>
+
+      <h1 class="animate-hero-reveal delay-100 font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-cream-100 leading-[1.04] tracking-tight mb-6">
+        Taste the Art of
+        <span class="block bg-gradient-to-r from-gold-400 via-gold-500 to-ember-400 bg-clip-text text-transparent italic font-semibold">
+          Fine Dining
+        </span>
+      </h1>
+
+      <p class="animate-hero-reveal delay-200 max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-cream-200/90 leading-relaxed mb-10 font-light">
+        Where heirloom harvests, live-fire craftsmanship, and candlelit hospitality converge. Every course at <span class="text-cream-100 font-medium">Aurelia</span> is composed to linger in memory long after the final sip.
+      </p>
+
+      <!-- Dual Animated Hero CTA Buttons -->
+      <div class="animate-hero-reveal delay-300 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#menu" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 font-bold text-base btn-glow shadow-glow-gold hover:scale-[1.02]">
+          <span>Explore Menu</span>
+          <i class="fa-solid fa-utensils"></i>
+        </a>
+
+        <a href="#reservation" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full glass-panel text-cream-100 font-semibold text-base border border-gold-400/40 hover:border-gold-400 hover:bg-charcoal-800/90 transition-all hover:scale-[1.02]">
+          <i class="fa-regular fa-calendar-check text-gold-400"></i>
+          <span>Book a Table</span>
+        </a>
+      </div>
+
+      <!-- Quick Trust Metrics Row -->
+      <div class="animate-hero-reveal delay-400 mt-14 pt-8 border-t border-cream-200/15 grid grid-cols-3 gap-4 max-w-xl mx-auto text-center">
+        <div>
+          <p class="font-serif text-2xl sm:text-3xl font-bold text-gold-400">4.9 ★</p>
+          <p class="text-xs text-cream-300/80 mt-0.5">Guest Rating</p>
+        </div>
+        <div>
+          <p class="font-serif text-2xl sm:text-3xl font-bold text-cream-100">18+</p>
+          <p class="text-xs text-cream-300/80 mt-0.5">Years of Heritage</p>
+        </div>
+        <div>
+          <p class="font-serif text-2xl sm:text-3xl font-bold text-ember-400">100%</p>
+          <p class="text-xs text-cream-300/80 mt-0.5">Farm-to-Table</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Elegant Scroll-Down Animation -->
+    <a href="#about" aria-label="Scroll to About Section" class="hidden sm:flex flex-col items-center gap-2 absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-cream-300/75 hover:text-gold-400 transition-colors">
+      <span class="text-[10px] uppercase tracking-[0.28em]">Scroll</span>
+      <div class="w-6 h-10 rounded-full border border-gold-400/45 flex items-start justify-center p-1.5">
+        <span class="w-1.5 h-2.5 rounded-full bg-gold-400 animate-scroll-drop"></span>
+      </div>
+    </a>
+  </section>
+
+  <!-- =====================================================================
+       3. ABOUT OUR RESTAURANT & ANIMATED COUNTERS
+       ===================================================================== -->
+  <section id="about" class="py-20 sm:py-28 relative bg-charcoal-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+
+        <!-- Left Visual Composition with Rounded Corners & Floating Badge -->
+        <div class="lg:col-span-6 reveal-item relative">
+          <div class="grid grid-cols-12 gap-4 items-end">
+            <div class="col-span-7 overflow-hidden rounded-3xl shadow-luxury border border-gold-500/20">
+              <img
+                src="https://images.unsplash.com/photo-1577219491135-ce391730fb4c?auto=format&fit=crop&w=800&q=80"
+                alt="Executive Chef plating dishes in Aurelia kitchen"
+                onerror="this.src='https://placehold.co/600x750/1E1916/E5A93C?text=Chef+At+Work'"
+                class="w-full h-72 sm:h-96 object-cover hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+            <div class="col-span-5 space-y-4">
+              <div class="overflow-hidden rounded-3xl shadow-luxury border border-gold-500/20">
+                <img
+                  src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=700&q=80"
+                  alt="Warm candlelit fine dining room"
+                  onerror="this.src='https://placehold.co/450x320/1E1916/FB923C?text=Dining+Room'"
+                  class="w-full h-40 sm:h-48 object-cover hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              <div class="glass-panel rounded-2xl p-4 sm:p-5 border border-gold-400/25">
+                <p class="font-serif italic text-gold-400 text-lg sm:text-xl leading-snug">
+                  “Purity of ingredient, quiet confidence on the plate.”
+                </p>
+                <p class="text-xs text-cream-300 mt-2 font-medium">— Chef Julian Vance</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Narrative: History, Chefs, Ingredients & Experience -->
+        <div class="lg:col-span-6 reveal-item">
+          <span class="inline-block text-xs uppercase tracking-[0.26em] text-gold-400 font-semibold mb-3">
+            Our Story &amp; Philosophy
+          </span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-cream-100 leading-tight mb-6">
+            A Sanctuary of <span class="text-gold-400 italic">Craft</span>, Fire &amp; Warmth
+          </h2>
+
+          <p class="text-cream-200/90 leading-relaxed mb-4">
+            Founded in 2008 by Executive Chef <strong class="text-cream-100">Julian Vance</strong> and Sommelier <strong class="text-cream-100">Elena Rostova</strong>, Aurelia began as an intimate twelve-seat supper room celebrating seasonal harvests. Today, our kitchen unites classical European technique with bold wood-fired flavors and modern culinary precision.
+          </p>
+          <p class="text-cream-300/85 leading-relaxed mb-8">
+            We partner directly with organic coastal fisheries, heritage orchards, and artisanal bakers every morning. Whether you join us for a multi-course tasting menu, a hand-stretched sourdough pizza at the hearth, or a velvet dessert with espresso, every detail is designed for unhurried connection.
+          </p>
+
+          <!-- Key Pillars -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-9">
+            <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-charcoal-800/70 border border-charcoal-600/60">
+              <div class="w-10 h-10 rounded-xl bg-gold-500/15 text-gold-400 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-seedling"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-cream-100 text-sm">Heirloom Ingredients</h3>
+                <p class="text-xs text-cream-300/75 mt-1">Harvested peak-season from trusted local farms.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-charcoal-800/70 border border-charcoal-600/60">
+              <div class="w-10 h-10 rounded-xl bg-ember-500/15 text-ember-400 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-cream-100 text-sm">Live Oak &amp; Olive Hearth</h3>
+                <p class="text-xs text-cream-300/75 mt-1">Aromatic smoke infusions &amp; blistered crusts.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Animated Counters Row -->
+          <div id="statsCounters" class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-cream-200/15">
+            <div class="text-center sm:text-left">
+              <div class="font-serif text-3xl sm:text-4xl font-bold text-gold-400">
+                <span class="counter" data-target="48500">0</span>+
+              </div>
+              <p class="text-xs text-cream-300/80 mt-1">Happy Guests</p>
+            </div>
+            <div class="text-center sm:text-left">
+              <div class="font-serif text-3xl sm:text-4xl font-bold text-cream-100">
+                <span class="counter" data-target="64">0</span>
+              </div>
+              <p class="text-xs text-cream-300/80 mt-1">Signature Dishes</p>
+            </div>
+            <div class="text-center sm:text-left">
+              <div class="font-serif text-3xl sm:text-4xl font-bold text-ember-400">
+                <span class="counter" data-target="14">0</span>
+              </div>
+              <p class="text-xs text-cream-300/80 mt-1">Culinary Awards</p>
+            </div>
+            <div class="text-center sm:text-left">
+              <div class="font-serif text-3xl sm:text-4xl font-bold text-gold-400">
+                <span class="counter" data-target="120">0</span>+
+              </div>
+              <p class="text-xs text-cream-300/80 mt-1">Curated Wines</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. INTERACTIVE FOOD MENU SECTION (FILTERABLE CATEGORIES + ORDER NOW)
+       ===================================================================== -->
+  <section id="menu" class="py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-12 reveal-item">
+        <span class="inline-block text-xs uppercase tracking-[0.26em] text-gold-400 font-semibold mb-2">
+          Curated Culinary Selection
+        </span>
+        <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-cream-100 mb-4">
+          Our <span class="text-gold-400 italic">Seasonal</span> Menu
+        </h2>
+        <p class="text-cream-300/85 text-sm sm:text-base">
+          Filter across our five signature kitchen chapters and add dishes directly to your table order preview.
+        </p>
+      </div>
+
+      <!-- Animated Category Filter Tabs -->
+      <div id="menuFilterBar" class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-12 reveal-item" role="tablist" aria-label="Menu Categories">
+        <button type="button" data-category="all" class="menu-filter-btn active px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 shadow-glow-gold">
+          All Dishes
+        </button>
+        <button type="button" data-category="starters" class="menu-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer glass-panel text-cream-200 hover:text-gold-400 hover:border-gold-400/50">
+          Starters
+        </button>
+        <button type="button" data-category="main" class="menu-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer glass-panel text-cream-200 hover:text-gold-400 hover:border-gold-400/50">
+          Main Course
+        </button>
+        <button type="button" data-category="pizza-burgers" class="menu-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer glass-panel text-cream-200 hover:text-gold-400 hover:border-gold-400/50">
+          Pizza &amp; Burgers
+        </button>
+        <button type="button" data-category="desserts" class="menu-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer glass-panel text-cream-200 hover:text-gold-400 hover:border-gold-400/50">
+          Desserts
+        </button>
+        <button type="button" data-category="beverages" class="menu-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer glass-panel text-cream-200 hover:text-gold-400 hover:border-gold-400/50">
+          Beverages
+        </button>
+      </div>
+
+      <!-- Menu Cards Grid (Populated & Filtered via JavaScript) -->
+      <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       5. SPECIAL OFFERS & PROMOTIONAL COUNTDOWN SECTION
+       ===================================================================== -->
+  <section id="offers" class="py-20 sm:py-28 bg-gradient-to-b from-charcoal-900/80 via-charcoal-950 to-charcoal-900/80 border-y border-gold-500/15">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Promotional Banner & Live Countdown -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-10 mb-12 border border-gold-400/30 shadow-luxury reveal-item">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+          <div class="max-w-2xl">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-ember-500/20 border border-ember-400/40 text-ember-400 text-xs font-bold uppercase tracking-wider mb-3">
+              <i class="fa-solid fa-bolt"></i> Limited-Time Tasting Privilege
+            </span>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-cream-100 mb-3">
+              Golden Hour &amp; <span class="text-gold-400 italic">Chef’s Table</span> Offers
+            </h2>
+            <p class="text-cream-200/85 text-sm sm:text-base">
+              Enjoy curated multi-course pairings, weekend family feasts, and complimentary sommelier pours before our next evening release closes.
+            </p>
+          </div>
+
+          <!-- Countdown Timer Box -->
+          <div class="shrink-0">
+            <p class="text-xs uppercase tracking-[0.2em] text-gold-400 font-semibold mb-2.5 text-center lg:text-left">
+              Offer Window Closes In
+            </p>
+            <div id="promoCountdown" class="grid grid-cols-4 gap-2.5 sm:gap-3 text-center">
+              <div class="bg-charcoal-900/95 border border-gold-500/25 rounded-2xl px-3.5 py-3 min-w-[68px]">
+                <span id="cdDays" class="block font-mono text-xl sm:text-2xl font-bold text-gold-400">02</span>
+                <span class="text-[10px] uppercase tracking-wider text-cream-300/75">Days</span>
+              </div>
+              <div class="bg-charcoal-900/95 border border-gold-500/25 rounded-2xl px-3.5 py-3 min-w-[68px]">
+                <span id="cdHours" class="block font-mono text-xl sm:text-2xl font-bold text-cream-100">14</span>
+                <span class="text-[10px] uppercase tracking-wider text-cream-300/75">Hours</span>
+              </div>
+              <div class="bg-charcoal-900/95 border border-gold-500/25 rounded-2xl px-3.5 py-3 min-w-[68px]">
+                <span id="cdMins" class="block font-mono text-xl sm:text-2xl font-bold text-ember-400">38</span>
+                <span class="text-[10px] uppercase tracking-wider text-cream-300/75">Mins</span>
+              </div>
+              <div class="bg-charcoal-900/95 border border-gold-500/25 rounded-2xl px-3.5 py-3 min-w-[68px]">
+                <span id="cdSecs" class="block font-mono text-xl sm:text-2xl font-bold text-gold-400">52</span>
+                <span class="text-[10px] uppercase tracking-wider text-cream-300/75">Secs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Offer Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Offer 1 -->
+        <div class="reveal-item group bg-charcoal-800/80 hover:bg-charcoal-800 rounded-3xl p-6 border border-charcoal-600/70 hover:border-gold-400/50 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="px-3 py-1 rounded-full bg-gold-500/20 text-gold-400 text-xs font-bold">25% OFF</span>
+              <span class="text-xs text-cream-300/70 font-mono">TUE–THU</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-cream-100 group-hover:text-gold-400 transition-colors mb-2">
+              Midweek Tasting Flight
+            </h3>
+            <p class="text-xs sm:text-sm text-cream-300/80 leading-relaxed mb-5">
+              Five seasonal tasting courses paired with artisanal sourdough and whipped cultured butter.
+            </p>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-2.5 mb-4">
+              <span class="font-mono text-xl font-bold text-gold-400">$78</span>
+              <span class="font-mono text-xs line-through text-cream-300/50">$104</span>
+            </div>
+            <a href="#reservation" class="block w-full text-center py-2.5 rounded-xl bg-charcoal-700 hover:bg-gradient-to-r hover:from-gold-500 hover:to-ember-500 text-cream-100 hover:text-charcoal-950 font-semibold text-xs sm:text-sm transition-all">
+              Claim Offer
+            </a>
+          </div>
+        </div>
+
+        <!-- Offer 2 -->
+        <div class="reveal-item group bg-charcoal-800/80 hover:bg-charcoal-800 rounded-3xl p-6 border border-ember-500/40 hover:border-ember-400 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between shadow-glow-ember/10">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="px-3 py-1 rounded-full bg-ember-500/25 text-ember-400 text-xs font-bold">COMBO DEAL</span>
+              <span class="text-xs text-cream-300/70 font-mono">FOR TWO</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-cream-100 group-hover:text-ember-400 transition-colors mb-2">
+              Hearth &amp; Wine Duet
+            </h3>
+            <p class="text-xs sm:text-sm text-cream-300/80 leading-relaxed mb-5">
+              One wood-fired artisan pizza, one Wagyu reserve burger, truffle fries, and two signature cocktails.
+            </p>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-2.5 mb-4">
+              <span class="font-mono text-xl font-bold text-ember-400">$69</span>
+              <span class="font-mono text-xs line-through text-cream-300/50">$89</span>
+            </div>
+            <a href="#reservation" class="block w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 font-bold text-xs sm:text-sm btn-glow">
+              Book Combo Table
+            </a>
+          </div>
+        </div>
+
+        <!-- Offer 3 -->
+        <div class="reveal-item group bg-charcoal-800/80 hover:bg-charcoal-800 rounded-3xl p-6 border border-charcoal-600/70 hover:border-gold-400/50 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="px-3 py-1 rounded-full bg-gold-500/20 text-gold-400 text-xs font-bold">WEEKEND</span>
+              <span class="text-xs text-cream-300/70 font-mono">SAT–SUN</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-cream-100 group-hover:text-gold-400 transition-colors mb-2">
+              Sunday Grand Table
+            </h3>
+            <p class="text-xs sm:text-sm text-cream-300/80 leading-relaxed mb-5">
+              Slow-roasted herb prime rib for four with Yorkshire puddings, roasted roots &amp; chocolate tart.
+            </p>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-2.5 mb-4">
+              <span class="font-mono text-xl font-bold text-gold-400">$145</span>
+              <span class="font-mono text-xs line-through text-cream-300/50">$180</span>
+            </div>
+            <a href="#reservation" class="block w-full text-center py-2.5 rounded-xl bg-charcoal-700 hover:bg-gradient-to-r hover:from-gold-500 hover:to-ember-500 text-cream-100 hover:text-charcoal-950 font-semibold text-xs sm:text-sm transition-all">
+              Reserve Sunday
+            </a>
+          </div>
+        </div>
+
+        <!-- Offer 4 -->
+        <div class="reveal-item group bg-charcoal-800/80 hover:bg-charcoal-800 rounded-3xl p-6 border border-charcoal-600/70 hover:border-gold-400/50 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="px-3 py-1 rounded-full bg-gold-500/20 text-gold-400 text-xs font-bold">CHEF’S PICK</span>
+              <span class="text-xs text-cream-300/70 font-mono">NIGHTLY</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-cream-100 group-hover:text-gold-400 transition-colors mb-2">
+              Black Truffle &amp; Sea
+            </h3>
+            <p class="text-xs sm:text-sm text-cream-300/80 leading-relaxed mb-5">
+              Pan-seared Hokkaido scallops and shaved black truffle tagliolini finished tableside in aged parmesan.
+            </p>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-2.5 mb-4">
+              <span class="font-mono text-xl font-bold text-gold-400">$54</span>
+              <span class="font-mono text-xs line-through text-cream-300/50">$66</span>
+            </div>
+            <button type="button" onclick="addQuickOrder('Black Truffle & Sea Special', 54)" class="w-full py-2.5 rounded-xl bg-charcoal-700 hover:bg-gradient-to-r hover:from-gold-500 hover:to-ember-500 text-cream-100 hover:text-charcoal-950 font-semibold text-xs sm:text-sm transition-all cursor-pointer">
+              Add Special
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       6. OUR SPECIAL DISHES (LARGE SIGNATURE SHOWCASE)
+       ===================================================================== -->
+  <section id="specials" class="py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 reveal-item">
+        <div>
+          <span class="inline-block text-xs uppercase tracking-[0.26em] text-gold-400 font-semibold mb-2">
+            Hallmark Creations
+          </span>
+          <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-cream-100">
+            Our <span class="text-ember-400 italic">Signature</span> Dishes
+          </h2>
+        </div>
+        <p class="max-w-md text-sm sm:text-base text-cream-300/85">
+          Iconic plates celebrated by our guests and critics—crafted with precision, open-flame aroma, and balanced contrast.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Signature Dish 1 -->
+        <article class="reveal-item group relative rounded-3xl overflow-hidden bg-charcoal-800 border border-gold-500/20 shadow-luxury">
+          <div class="relative h-72 sm:h-80 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
+              alt="Dry-Aged Ribeye with Herb Jus"
+              onerror="this.src='https://placehold.co/600x450/1E1916/E5A93C?text=Dry-Aged+Ribeye'"
+              class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 animate-float-slow"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950 via-charcoal-950/30 to-transparent"></div>
+            <span class="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-charcoal-950/80 backdrop-blur-md border border-gold-400/35 text-gold-400 font-mono text-xs font-bold">
+              $58
+            </span>
+          </div>
+          <div class="p-6 sm:p-7 -mt-6 relative z-10">
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold text-cream-100 mb-2">
+              45-Day Dry-Aged Ribeye
+            </h3>
+            <p class="text-sm text-cream-300/85 leading-relaxed mb-5">
+              Seared over white oak embers with roasted bone marrow glaze, charred baby leeks, and smoked sea salt flakes.
+            </p>
+            <button type="button" onclick="addQuickOrder('45-Day Dry-Aged Ribeye', 58)" class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-gold-400 hover:text-ember-400 transition-colors cursor-pointer">
+              <span>Order Signature</span>
+              <i class="fa-solid fa-arrow-right-long"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- Signature Dish 2 -->
+        <article class="reveal-item group relative rounded-3xl overflow-hidden bg-charcoal-800 border border-gold-500/20 shadow-luxury">
+          <div class="relative h-72 sm:h-80 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=900&q=80"
+              alt="Saffron Lobster & Seafood Risotto"
+              onerror="this.src='https://placehold.co/600x450/1E1916/FB923C?text=Saffron+Lobster'"
+              class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 animate-float-reverse"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950 via-charcoal-950/30 to-transparent"></div>
+            <span class="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-charcoal-950/80 backdrop-blur-md border border-ember-400/40 text-ember-400 font-mono text-xs font-bold">
+              $49
+            </span>
+          </div>
+          <div class="p-6 sm:p-7 -mt-6 relative z-10">
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold text-cream-100 mb-2">
+              Saffron Butter Lobster
+            </h3>
+            <p class="text-sm text-cream-300/85 leading-relaxed mb-5">
+              Poached Atlantic lobster tail over Carnaroli saffron risotto, Meyer lemon oil, and crisp fennel pollen.
+            </p>
+            <button type="button" onclick="addQuickOrder('Saffron Butter Lobster', 49)" class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-gold-400 hover:text-ember-400 transition-colors cursor-pointer">
+              <span>Order Signature</span>
+              <i class="fa-solid fa-arrow-right-long"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- Signature Dish 3 -->
+        <article class="reveal-item group relative rounded-3xl overflow-hidden bg-charcoal-800 border border-gold-500/20 shadow-luxury">
+          <div class="relative h-72 sm:h-80 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80"
+              alt="Valrhona Dark Chocolate Soufflé & Gold Leaf"
+              onerror="this.src='https://placehold.co/600x450/1E1916/E5A93C?text=Dark+Chocolate+Souffle'"
+              class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 animate-float-slow"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950 via-charcoal-950/30 to-transparent"></div>
+            <span class="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-charcoal-950/80 backdrop-blur-md border border-gold-400/35 text-gold-400 font-mono text-xs font-bold">
+              $21
+            </span>
+          </div>
+          <div class="p-6 sm:p-7 -mt-6 relative z-10">
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold text-cream-100 mb-2">
+              70% Noir Chocolate Dome
+            </h3>
+            <p class="text-sm text-cream-300/85 leading-relaxed mb-5">
+              Warm single-origin dark chocolate ganache poured tableside over roasted hazelnut praline and blood orange sorbet.
+            </p>
+            <button type="button" onclick="addQuickOrder('70% Noir Chocolate Dome', 21)" class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-gold-400 hover:text-ember-400 transition-colors cursor-pointer">
+              <span>Order Signature</span>
+              <i class="fa-solid fa-arrow-right-long"></i>
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       7. CUSTOMER REVIEWS & AUTOMATIC SLIDER
+       ===================================================================== -->
+  <section id="reviews" class="py-20 sm:py-28 bg-charcoal-900/70 border-y border-gold-500/15">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header + Overall Satisfaction Score -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 reveal-item">
+        <div>
+          <span class="inline-block text-xs uppercase tracking-[0.26em] text-gold-400 font-semibold mb-2">
+            Guest Reflections
+          </span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-cream-100">
+            Words From <span class="text-gold-400 italic">Our Table</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel rounded-2xl px-6 py-4 flex items-center gap-4 border border-gold-400/30 self-start md:self-auto">
+          <div>
+            <p class="font-serif text-3xl sm:text-4xl font-bold text-gold-400 leading-none">4.9 / 5.0</p>
+            <p class="text-xs text-cream-300/80 mt-1">98.6% Customer Satisfaction</p>
+          </div>
+          <div class="text-amber-400 text-sm flex flex-col items-end">
+            <div>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star-half-stroke"></i>
+            </div>
+            <span class="text-[11px] text-cream-300/70 mt-1">2,400+ Verified Diners</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slider Container -->
+      <div id="testimonialSlider" class="relative glass-panel rounded-3xl p-7 sm:p-12 border border-gold-500/20 shadow-luxury reveal-item" role="region" aria-label="Customer Testimonials">
+        <div id="testimonialTrack" class="min-h-[230px] flex items-center transition-opacity duration-300"></div>
+
+        <!-- Controls & Dots -->
+        <div class="mt-8 pt-6 border-t border-cream-200/10 flex flex-wrap items-center justify-between gap-4">
+          <div id="testimonialDots" class="flex items-center gap-2"></div>
+
+          <div class="flex items-center gap-2.5">
+            <button id="prevReviewBtn" type="button" aria-label="Previous Review" class="w-10 h-10 rounded-full bg-charcoal-800 hover:bg-gold-500 text-cream-100 hover:text-charcoal-950 border border-charcoal-600 flex items-center justify-center transition-all cursor-pointer">
+              <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <button id="nextReviewBtn" type="button" aria-label="Next Review" class="w-10 h-10 rounded-full bg-charcoal-800 hover:bg-gold-500 text-cream-100 hover:text-charcoal-950 border border-charcoal-600 flex items-center justify-center transition-all cursor-pointer">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       8. GALLERY SECTION (RESPONSIVE GRID WITH HOVER ZOOM & OVERLAYS)
+       ===================================================================== -->
+  <section id="gallery" class="py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12 reveal-item">
+        <span class="inline-block text-xs uppercase tracking-[0.26em] text-gold-400 font-semibold mb-2">
+          Visual Diary
+        </span>
+        <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-cream-100 mb-4">
+          Inside <span class="text-gold-400 italic">Aurelia</span>
+        </h2>
+        <p class="text-cream-300/85 text-sm sm:text-base">
+          Glimpses of our open hearth, sunlit dining room, master chefs at work, and vibrant seasonal plates.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Gallery Item 1 -->
+        <div class="reveal-item group relative h-72 rounded-3xl overflow-hidden border border-charcoal-700 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
+            alt="Elegant restaurant dining interior"
+            onerror="this.src='https://placehold.co/600x450/1E1916/E5A93C?text=Dining+Room'"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-85 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+            <span class="text-xs uppercase tracking-widest text-gold-400 font-semibold">Interior</span>
+            <h3 class="font-serif text-2xl font-bold text-cream-100">Candlelit Main Salon</h3>
+          </div>
+        </div>
+
+        <!-- Gallery Item 2 -->
+        <div class="reveal-item group relative h-72 rounded-3xl overflow-hidden border border-charcoal-700 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80"
+            alt="Chefs preparing gourmet dishes in kitchen"
+            onerror="this.src='https://placehold.co/600x450/1E1916/FB923C?text=Culinary+Team'"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-85 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+            <span class="text-xs uppercase tracking-widest text-ember-400 font-semibold">Chefs</span>
+            <h3 class="font-serif text-2xl font-bold text-cream-100">Precision Plating Pass</h3>
+          </div>
+        </div>
+
+        <!-- Gallery Item 3 -->
+        <div class="reveal-item group relative h-72 rounded-3xl overflow-hidden border border-charcoal-700 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80"
+            alt="Wood-fired artisan pizza fresh from oven"
+            onerror="this.src='https://placehold.co/600x450/1E1916/E5A93C?text=Wood+Fired+Pizza'"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-85 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+            <span class="text-xs uppercase tracking-widest text-gold-400 font-semibold">Hearth</span>
+            <h3 class="font-serif text-2xl font-bold text-cream-100">72-Hour Sourdough Pizza</h3>
+          </div>
+        </div>
+
+        <!-- Gallery Item 4 -->
+        <div class="reveal-item group relative h-72 rounded-3xl overflow-hidden border border-charcoal-700 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+            alt="Vibrant seasonal spread of fine dining dishes"
+            onerror="this.src='https://placehold.co/600x450/1E1916/FB923C?text=Tasting+Spread'"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-85 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+            <span class="text-xs uppercase tracking-widest text-ember-400 font-semibold">Tasting</span>
+            <h3 class="font-serif text-2xl font-bold text-cream-100">Autumn Harvest Table</h3>
+          </div>
+        </div>
+
+        <!-- Gallery Item 5 -->
+        <div class="reveal-item group relative h-72 rounded-3xl overflow-hidden border border-charcoal-700 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80"
+            alt="Sommelier pouring red wine into crystal glass"
+            onerror="this.src='https://placehold.co/600x450/1E1916/E5A93C?text=Wine+Cellar'"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-85 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+            <span class="text-xs uppercase tracking-widest text-gold-400 font-semibold">Cellar</span>
+            <h3 class="font-serif text-2xl font-bold text-cream-100">Reserve Vintage Pour</h3>
+          </div>
+        </div>
+
+        <!-- Gallery Item 6 -->
+        <div class="reveal-item group relative h-72 rounded-3xl overflow-hidden border border-charcoal-700 shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=800&q=80"
+            alt="Artisanal berry dessert plated with cream"
+            onerror="this.src='https://placehold.co/600x450/1E1916/FB923C?text=Pastry+Atelier'"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-85 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+            <span class="text-xs uppercase tracking-widest text-ember-400 font-semibold">Pastry</span>
+            <h3 class="font-serif text-2xl font-bold text-cream-100">Botanical Crème &amp; Berry</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       9. RESERVATION SECTION (FORM VALIDATION & CONFIRMATION MESSAGE)
+       ===================================================================== -->
+  <section id="reservation" class="py-20 sm:py-28 bg-gradient-to-b from-charcoal-900/75 to-charcoal-950 border-t border-gold-500/15">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-panel rounded-3xl p-6 sm:p-10 md:p-12 border border-gold-400/25 shadow-luxury reveal-item">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="inline-block text-xs uppercase tracking-[0.26em] text-gold-400 font-semibold mb-2">
+            Table Booking
+          </span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-cream-100 mb-3">
+            Reserve <span class="text-gold-400 italic">Your Table</span>
+          </h2>
+          <p class="text-cream-300/85 text-sm sm:text-base">
+            Book an intimate dinner for two, a celebratory gathering, or a seat at the chef’s counter.
+          </p>
+        </div>
+
+        <form id="reservationForm" novalidate class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <!-- Name -->
+          <div>
+            <label for="resName" class="block text-xs uppercase tracking-wider text-cream-200 font-semibold mb-2">
+              Full Name *
+            </label>
+            <input
+              id="resName"
+              name="name"
+              type="text"
+              placeholder="Clara Sterling"
+              class="w-full px-4 py-3.5 rounded-xl bg-charcoal-900/90 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-cream-100 placeholder-cream-300/40 text-sm transition-colors"
+            />
+            <p class="error-msg text-xs text-ember-400 mt-1.5 hidden"></p>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="resEmail" class="block text-xs uppercase tracking-wider text-cream-200 font-semibold mb-2">
+              Email Address *
+            </label>
+            <input
+              id="resEmail"
+              name="email"
+              type="email"
+              placeholder="clara@example.com"
+              class="w-full px-4 py-3.5 rounded-xl bg-charcoal-900/90 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-cream-100 placeholder-cream-300/40 text-sm transition-colors"
+            />
+            <p class="error-msg text-xs text-ember-400 mt-1.5 hidden"></p>
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label for="resPhone" class="block text-xs uppercase tracking-wider text-cream-200 font-semibold mb-2">
+              Phone Number *
+            </label>
+            <input
+              id="resPhone"
+              name="phone"
+              type="tel"
+              placeholder="+1 (555) 234-8910"
+              class="w-full px-4 py-3.5 rounded-xl bg-charcoal-900/90 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-cream-100 placeholder-cream-300/40 text-sm transition-colors"
+            />
+            <p class="error-msg text-xs text-ember-400 mt-1.5 hidden"></p>
+          </div>
+
+          <!-- Guests -->
+          <div>
+            <label for="resGuests" class="block text-xs uppercase tracking-wider text-cream-200 font-semibold mb-2">
+              Number of Guests *
+            </label>
+            <select
+              id="resGuests"
+              name="guests"
+              class="w-full px-4 py-3.5 rounded-xl bg-charcoal-900/90 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-cream-100 text-sm transition-colors"
+            >
+              <option value="">Select party size</option>
+              <option value="1 Guest">1 Guest (Chef Counter)</option>
+              <option value="2 Guests">2 Guests</option>
+              <option value="3 Guests">3 Guests</option>
+              <option value="4 Guests">4 Guests</option>
+              <option value="6 Guests">6 Guests</option>
+              <option value="8+ Guests (Private Dining)">8+ Guests (Private Dining)</option>
+            </select>
+            <p class="error-msg text-xs text-ember-400 mt-1.5 hidden"></p>
+          </div>
+
+          <!-- Date -->
+          <div>
+            <label for="resDate" class="block text-xs uppercase tracking-wider text-cream-200 font-semibold mb-2">
+              Preferred Date *
+            </label>
+            <input
+              id="resDate"
+              name="date"
+              type="date"
+              class="w-full px-4 py-3.5 rounded-xl bg-charcoal-900/90 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-cream-100 text-sm transition-colors"
+            />
+            <p class="error-msg text-xs text-ember-400 mt-1.5 hidden"></p>
+          </div>
+
+          <!-- Time -->
+          <div>
+            <label for="resTime" class="block text-xs uppercase tracking-wider text-cream-200 font-semibold mb-2">
+              Preferred Time *
+            </label>
+            <select
+              id="resTime"
+              name="time"
+              class="w-full px-4 py-3.5 rounded-xl bg-charcoal-900/90 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-cream-100 text-sm transition-colors"
+            >
+              <option value="">Select seating time</option>
+              <option value="12:30 PM">12:30 PM — Lunch</option>
+              <option value="02:00 PM">02:00 PM — Late Lunch</option>
+              <option value="06:00 PM">06:00 PM — Early Evening</option>
+              <option value="07:30 PM">07:30 PM — Prime Dinner</option>
+              <option value="09:00 PM">09:00 PM — Late Supper</option>
+            </select>
+            <p class="error-msg text-xs text-ember-400 mt-1.5 hidden"></p>
+          </div>
+
+          <!-- Optional Notes -->
+          <div class="sm:col-span-2">
+            <label for="resNotes" class="block text-xs uppercase tracking-wider text-cream-200 font-semibold mb-2">
+              Dietary Notes or Occasion (Optional)
+            </label>
+            <textarea
+              id="resNotes"
+              name="notes"
+              rows="2"
+              placeholder="Anniversary celebration, gluten-free preference, window table..."
+              class="w-full px-4 py-3 rounded-xl bg-charcoal-900/90 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-cream-100 placeholder-cream-300/40 text-sm transition-colors"
+            ></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="sm:col-span-2 text-center pt-2">
+            <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 font-bold text-base btn-glow shadow-glow-gold cursor-pointer">
+              <i class="fa-solid fa-champagne-glasses"></i>
+              <span>Reserve Your Table</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Confirmation Banner (Hidden until valid submission) -->
+        <div id="reservationConfirmation" class="hidden mt-8 p-6 rounded-2xl bg-emerald-950/50 border border-emerald-400/40 text-cream-100">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid fa-check text-lg"></i>
+            </div>
+            <div>
+              <h3 class="font-serif text-2xl font-bold text-emerald-300 mb-1">Table Reservation Confirmed</h3>
+              <p id="reservationSummaryText" class="text-sm text-cream-200/90 leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       10. CONTACT, GOOGLE MAPS EMBED & FOOTER
+       ===================================================================== -->
+  <section id="contact" class="py-20 sm:py-28 bg-charcoal-950 border-t border-charcoal-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="text-center max-w-2xl mx-auto mb-14 reveal-item">
+        <span class="inline-block text-xs uppercase tracking-[0.26em] text-gold-400 font-semibold mb-2">
+          Visit &amp; Connect
+        </span>
+        <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-cream-100 mb-3">
+          Contact &amp; <span class="text-gold-400 italic">Location</span>
+        </h2>
+        <p class="text-cream-300/85 text-sm sm:text-base">
+          Located in the historic culinary district with valet parking available every evening.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <!-- Info Cards + Contact Form -->
+        <div class="lg:col-span-6 space-y-6 reveal-item">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-5 rounded-2xl bg-charcoal-900 border border-charcoal-700/80">
+              <i class="fa-solid fa-location-dot text-gold-400 text-lg mb-2"></i>
+              <h3 class="font-semibold text-cream-100 text-sm mb-1">Address</h3>
+              <p class="text-xs text-cream-300/80 leading-relaxed">
+                418 Mercer Culinary Row, Suite 100<br />San Francisco, CA 94108
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-charcoal-900 border border-charcoal-700/80">
+              <i class="fa-solid fa-clock text-ember-400 text-lg mb-2"></i>
+              <h3 class="font-semibold text-cream-100 text-sm mb-1">Opening Hours</h3>
+              <p class="text-xs text-cream-300/80 leading-relaxed">
+                Tue–Fri: 12 PM – 2:30 PM, 5:30 PM – 10:30 PM<br />Sat–Sun: 12 PM – 11:00 PM
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-charcoal-900 border border-charcoal-700/80">
+              <i class="fa-solid fa-phone text-gold-400 text-lg mb-2"></i>
+              <h3 class="font-semibold text-cream-100 text-sm mb-1">Phone</h3>
+              <a href="tel:+14158904321" class="text-xs text-cream-200 hover:text-gold-400 transition-colors">
+                +1 (415) 890-4321
+              </a>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-charcoal-900 border border-charcoal-700/80">
+              <i class="fa-solid fa-envelope text-ember-400 text-lg mb-2"></i>
+              <h3 class="font-semibold text-cream-100 text-sm mb-1">Email &amp; Social</h3>
+              <a href="mailto:concierge@aureliadining.com" class="block text-xs text-cream-200 hover:text-gold-400 transition-colors mb-2.5">
+                concierge@aureliadining.com
+              </a>
+              <div class="flex items-center gap-3 text-cream-300">
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="hover:text-gold-400 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="hover:text-gold-400 transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X Twitter" class="hover:text-gold-400 transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="hover:text-gold-400 transition-colors"><i class="fa-brands fa-youtube"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Direct Message Form -->
+          <form id="contactForm" novalidate class="p-6 rounded-3xl bg-charcoal-900 border border-charcoal-700/80 space-y-4">
+            <h3 class="font-serif text-2xl font-bold text-cream-100">Send Us a Note</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  id="contactName"
+                  type="text"
+                  placeholder="Your Name *"
+                  class="w-full px-4 py-3 rounded-xl bg-charcoal-800 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-sm text-cream-100 placeholder-cream-300/40"
+                />
+                <p class="contact-err text-xs text-ember-400 mt-1 hidden"></p>
+              </div>
+              <div>
+                <input
+                  id="contactEmail"
+                  type="email"
+                  placeholder="Your Email *"
+                  class="w-full px-4 py-3 rounded-xl bg-charcoal-800 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-sm text-cream-100 placeholder-cream-300/40"
+                />
+                <p class="contact-err text-xs text-ember-400 mt-1 hidden"></p>
+              </div>
+            </div>
+            <div>
+              <textarea
+                id="contactMessage"
+                rows="3"
+                placeholder="Private events, wine pairing inquiries, or feedback... *"
+                class="w-full px-4 py-3 rounded-xl bg-charcoal-800 border border-charcoal-600 focus:border-gold-400 focus:outline-none text-sm text-cream-100 placeholder-cream-300/40"
+              ></textarea>
+              <p class="contact-err text-xs text-ember-400 mt-1 hidden"></p>
+            </div>
+            <button type="submit" class="px-6 py-3 rounded-xl bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 font-bold text-sm btn-glow cursor-pointer">
+              Send Message
+            </button>
+            <div id="contactSuccess" class="hidden p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-400/35 text-emerald-300 text-xs sm:text-sm"></div>
+          </form>
+        </div>
+
+        <!-- Interactive Google Maps Embed -->
+        <div class="lg:col-span-6 reveal-item min-h-[380px] rounded-3xl overflow-hidden border border-gold-500/20 shadow-luxury">
+          <iframe
+            title="Aurelia Restaurant Location Map"
+            src="https://www.google.com/maps?q=418+Mercer+St,+San+Francisco,+CA&output=embed"
+            class="w-full h-full min-h-[380px] border-0"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-charcoal-950 border-t border-charcoal-800 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-cream-300/70">
+      <div class="flex items-center gap-2.5">
+        <span class="font-serif text-lg font-bold text-gold-400">AURELIA</span>
+        <span>•</span>
+        <span>Taste the Art of Fine Dining</span>
+      </div>
+      <p>&copy; <span id="copyrightYear">2026</span> Aurelia Culinary Atelier. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       ORDER SUMMARY DRAWER / MODAL & TOAST NOTIFICATION (NO ALERT())
+       ===================================================================== -->
+  <div id="orderModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-charcoal-950/80 backdrop-blur-sm p-4">
+    <div class="glass-panel rounded-3xl max-w-md w-full p-6 border border-gold-400/30 shadow-luxury">
+      <div class="flex items-center justify-between pb-4 border-b border-cream-200/10">
+        <h3 class="font-serif text-2xl font-bold text-cream-100">Your Table Order</h3>
+        <button id="closeOrderModalBtn" type="button" aria-label="Close Order Summary" class="w-8 h-8 rounded-full bg-charcoal-800 text-cream-200 hover:text-gold-400 flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="orderItemsList" class="my-5 space-y-3 max-h-64 overflow-y-auto text-sm"></div>
+      <div class="pt-4 border-t border-cream-200/15 flex items-center justify-between mb-5">
+        <span class="text-cream-300 text-sm">Estimated Total</span>
+        <span id="orderTotalPrice" class="font-mono text-xl font-bold text-gold-400">$0.00</span>
+      </div>
+      <div class="flex gap-3">
+        <button id="clearOrderBtn" type="button" class="flex-1 py-2.5 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-cream-200 text-xs sm:text-sm font-semibold transition-colors cursor-pointer">
+          Clear
+        </button>
+        <a id="confirmOrderBtn" href="#reservation" class="flex-[2] text-center py-2.5 rounded-xl bg-gradient-to-r from-gold-500 to-ember-500 text-charcoal-950 font-bold text-xs sm:text-sm btn-glow">
+          Proceed to Table Booking
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Feedback -->
+  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden items-center gap-3 px-5 py-3.5 rounded-2xl glass-panel border border-gold-400/40 text-cream-100 text-xs sm:text-sm shadow-luxury">
+    <i class="fa-solid fa-circle-check text-gold-400 text-base"></i>
+    <span id="toastMessage">Added to your order.</span>
+  </div>
+
+  <!-- =====================================================================
+       JAVASCRIPT: MENU DATA, FILTERS, ORDER BAG, SLIDER, PARALLAX & FORMS
+       ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // Set current year dynamically
+      const yearEl = document.getElementById('copyrightYear');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // -------------------------------------------------------------------
+      // 1. MENU DATASET (Starters, Main Course, Pizza & Burgers, Desserts, Beverages)
+      // -------------------------------------------------------------------
+      const MENU_ITEMS = [
+        {
+          id: 'st-1',
+          name: 'Burrata & Heirloom Peach',
+          category: 'starters',
+          categoryLabel: 'Starters',
+          price: 18,
+          desc: 'Creamy Pugliese burrata, charred orchard peaches, toasted pistachio crunch, and aged balsamic.',
+          img: 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'st-2',
+          name: 'Hokkaido Scallop Crudo',
+          category: 'starters',
+          categoryLabel: 'Starters',
+          price: 22,
+          desc: 'Chilled sea scallops, yuzu kosho vinaigrette, crispy shallots, and micro cilantro.',
+          img: 'https://images.unsplash.com/photo-1535140728325-a4d3707eee61?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'mn-1',
+          name: 'Pan-Seared Chilean Sea Bass',
+          category: 'main',
+          categoryLabel: 'Main Course',
+          price: 44,
+          desc: 'Crisp-skinned sea bass over fennel velouté, charred broccolini, and preserved lemon.',
+          img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'mn-2',
+          name: 'Black Truffle Risotto',
+          category: 'main',
+          categoryLabel: 'Main Course',
+          price: 34,
+          desc: 'Slow-stirred Acquerello risotto, aged Parmigiano-Reggiano, wild mushrooms, and shaved truffle.',
+          img: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'pz-1',
+          name: 'Diavola Honey Hearth Pizza',
+          category: 'pizza-burgers',
+          categoryLabel: 'Pizza & Burgers',
+          price: 24,
+          desc: '72-hour fermented sourdough crust, San Marzano tomato, fior di latte, soppressata & chili honey.',
+          img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'pz-2',
+          name: 'Aurelia Wagyu Reserve Burger',
+          category: 'pizza-burgers',
+          categoryLabel: 'Pizza & Burgers',
+          price: 27,
+          desc: 'Double dry-aged Wagyu patty, smoked gruyère, caramelized onion jam, brioche & truffle aioli.',
+          img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'ds-1',
+          name: 'Salted Caramel Crème Brûlée',
+          category: 'desserts',
+          categoryLabel: 'Desserts',
+          price: 15,
+          desc: 'Madagascar vanilla bean custard with caramelized demerara crust and fleur de sel.',
+          img: 'https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'ds-2',
+          name: 'Pistachio Raspberry Mille-Feuille',
+          category: 'desserts',
+          categoryLabel: 'Desserts',
+          price: 16,
+          desc: 'Flaky caramelized puff pastry layered with roasted Bronte pistachio cream and fresh raspberries.',
+          img: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'bv-1',
+          name: 'Smoked Amber Old Fashioned',
+          category: 'beverages',
+          categoryLabel: 'Beverages',
+          price: 19,
+          desc: 'Small-batch bourbon, spiced demerara, Angostura bitters, and expressed orange peel.',
+          img: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'bv-2',
+          name: 'Hibiscus Citrus Botanical Spritz',
+          category: 'beverages',
+          categoryLabel: 'Beverages',
+          price: 13,
+          desc: 'Zero-proof steeped hibiscus infusion, blood orange cordial, rosemary sprig, and sparkling water.',
+          img: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=800&q=80'
+        }
+      ];
+
+      // -------------------------------------------------------------------
+      // 2. RENDER & FILTER MENU CARDS
+      // -------------------------------------------------------------------
+      const menuGrid = document.getElementById('menuGrid');
+      const filterButtons = document.querySelectorAll('.menu-filter-btn');
+
+      function renderMenu(category) {
+        if (!menuGrid) return;
+        const filtered = category === 'all'
+          ? MENU_ITEMS
+          : MENU_ITEMS.filter((item) => item.category === category);
+
+        menuGrid.innerHTML = filtered.map((item) => `
+          <article class="food-card group rounded-3xl bg-charcoal-800/85 border border-charcoal-700/80 hover:border-gold-400/45 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg">
+            <div>
+              <div class="relative h-52 overflow-hidden bg-charcoal-900">
+                <img
+                  src="${item.img}"
+                  alt="${item.name}"
+                  onerror="this.src='https://placehold.co/600x400/1E1916/E5A93C?text=${encodeURIComponent(item.name)}'"
+                  class="food-card-img w-full h-full object-cover"
+                />
+                <span class="absolute top-3.5 left-3.5 px-3 py-1 rounded-full bg-charcoal-950/80 backdrop-blur-md text-[11px] font-semibold uppercase tracking-wider text-cream-200 border border-cream-200/15">
+                  ${item.categoryLabel}
+                </span>
+                <span class="absolute bottom-3.5 right-3.5 px-3.5 py-1 rounded-full bg-charcoal-950/90 text-gold-400 font-mono text-sm font-bold border border-gold-400/30">
+                  $${item.price.toFixed(2)}
+                </span>
+              </div>
+              <div class="p-6">
+                <h3 class="font-serif text-2xl font-bold text-cream-100 group-hover:text-gold-400 transition-colors mb-2">
+                  ${item.name}
+                </h3>
+                <p class="text-xs sm:text-sm text-cream-300/80 leading-relaxed">
+                  ${item.desc}
+                </p>
+              </div>
+            </div>
+            <div class="px-6 pb-6 pt-1">
+              <button
+                type="button"
+                onclick="addQuickOrder('${item.name.replace(/'/g, "\\'")}', ${item.price})"
+                class="w-full py-3 rounded-xl bg-charcoal-700/90 hover:bg-gradient-to-r hover:from-gold-500 hover:to-ember-500 text-cream-100 hover:text-charcoal-950 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Order Now</span>
+              </button>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      filterButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach((b) => {
+            b.classList.remove('active', 'bg-gradient-to-r', 'from-gold-500', 'to-ember-500', 'text-charcoal-950', 'shadow-glow-gold');
+            b.classList.add('glass-panel', 'text-cream-200');
+          });
+          btn.classList.remove('glass-panel', 'text-cream-200');
+          btn.classList.add('active', 'bg-gradient-to-r', 'from-gold-500', 'to-ember-500', 'text-charcoal-950', 'shadow-glow-gold');
+
+          const cat = btn.getAttribute('data-category') || 'all';
+          renderMenu(cat);
+        });
+      });
+
+      renderMenu('all');
+
+      // -------------------------------------------------------------------
+      // 3. ORDER SUMMARY & TOAST FEEDBACK
+      // -------------------------------------------------------------------
+      let orderItems = [];
+      let toastTimeout = null;
+
+      function showToast(msg) {
+        const banner = document.getElementById('toastBanner');
+        const text = document.getElementById('toastMessage');
+        if (!banner || !text) return;
+        text.textContent = msg;
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          banner.classList.add('hidden');
+          banner.classList.remove('flex');
+        }, 2800);
+      }
+
+      function updateOrderBadge() {
+        const badge = document.getElementById('orderCountBadge');
+        if (!badge) return;
+        const totalQty = orderItems.reduce((sum, entry) => sum + entry.qty, 0);
+        if (totalQty > 0) {
+          badge.textContent = String(totalQty);
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+
+      function renderOrderModal() {
+        const listEl = document.getElementById('orderItemsList');
+        const totalEl = document.getElementById('orderTotalPrice');
+        if (!listEl || !totalEl) return;
+
+        if (orderItems.length === 0) {
+          listEl.innerHTML = '<p class="text-cream-300/70 text-center py-6">Your table order is currently empty. Click "Order Now" on any dish to add it.</p>';
+          totalEl.textContent = '$0.00';
+          return;
+        }
+
+        let total = 0;
+        listEl.innerHTML = orderItems.map((entry) => {
+          const lineTotal = entry.price * entry.qty;
+          total += lineTotal;
+          return `
+            <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-charcoal-900/80 border border-charcoal-700/60">
+              <div>
+                <p class="font-semibold text-cream-100 text-xs sm:text-sm">${entry.name}</p>
+                <p class="text-xs text-cream-300/70 font-mono">Qty: ${entry.qty} × $${entry.price.toFixed(2)}</p>
+              </div>
+              <span class="font-mono font-bold text-gold-400 text-sm">$${lineTotal.toFixed(2)}</span>
+            </div>
+          `;
+        }).join('');
+
+        totalEl.textContent = `$${total.toFixed(2)}`;
+      }
+
+      window.addQuickOrder = function (name, price) {
+        const existing = orderItems.find((item) => item.name === name);
+        if (existing) {
+          existing.qty += 1;
+        } else {
+          orderItems.push({ name, price, qty: 1 });
+        }
+        updateOrderBadge();
+        showToast(`Added "${name}" to your order.`);
+      };
+
+      const orderModal = document.getElementById('orderModal');
+      const orderBagBtn = document.getElementById('orderBagBtn');
+      const closeOrderModalBtn = document.getElementById('closeOrderModalBtn');
+      const clearOrderBtn = document.getElementById('clearOrderBtn');
+      const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+
+      if (orderBagBtn && orderModal) {
+        orderBagBtn.addEventListener('click', () => {
+          renderOrderModal();
+          orderModal.classList.remove('hidden');
+          orderModal.classList.add('flex');
+        });
+      }
+
+      function hideOrderModal() {
+        if (!orderModal) return;
+        orderModal.classList.add('hidden');
+        orderModal.classList.remove('flex');
+      }
+
+      if (closeOrderModalBtn) closeOrderModalBtn.addEventListener('click', hideOrderModal);
+      if (confirmOrderBtn) confirmOrderBtn.addEventListener('click', hideOrderModal);
+      if (orderModal) {
+        orderModal.addEventListener('click', (e) => {
+          if (e.target === orderModal) hideOrderModal();
+        });
+      }
+      if (clearOrderBtn) {
+        clearOrderBtn.addEventListener('click', () => {
+          orderItems = [];
+          updateOrderBadge();
+          renderOrderModal();
+          showToast('Order cleared.');
+        });
+      }
+
+      // -------------------------------------------------------------------
+      // 4. SPECIAL OFFERS COUNTDOWN TIMER
+      // -------------------------------------------------------------------
+      const targetDeadline = Date.now() + ((2 * 24 + 14) * 3600 + 38 * 60 + 52) * 1000;
+
+      function updateCountdown() {
+        const now = Date.now();
+        let diff = Math.max(0, Math.floor((targetDeadline - now) / 1000));
+
+        const days = Math.floor(diff / 86400);
+        diff %= 86400;
+        const hours = Math.floor(diff / 3600);
+        diff %= 3600;
+        const mins = Math.floor(diff / 60);
+        const secs = diff % 60;
+
+        const pad = (n) => String(n).padStart(2, '0');
+        const dEl = document.getElementById('cdDays');
+        const hEl = document.getElementById('cdHours');
+        const mEl = document.getElementById('cdMins');
+        const sEl = document.getElementById('cdSecs');
+
+        if (dEl) dEl.textContent = pad(days);
+        if (hEl) hEl.textContent = pad(hours);
+        if (mEl) mEl.textContent = pad(mins);
+        if (sEl) sEl.textContent = pad(secs);
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      // -------------------------------------------------------------------
+      // 5. CUSTOMER REVIEWS AUTOMATIC SLIDER
+      // -------------------------------------------------------------------
+      const REVIEWS = [
+        {
+          name: 'Margaux Delacroix',
+          role: 'Food Critic & Culinary Writer',
+          rating: 5,
+          quote: 'Every course felt deliberate yet effortless. The 45-day dry-aged ribeye with bone marrow glaze and smoked citrus cocktail set a benchmark for warmth and refinement.',
+          avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=250&q=80'
+        },
+        {
+          name: 'Devon Takahashi',
+          role: 'Anniversary Guest',
+          rating: 5,
+          quote: 'We celebrated our tenth anniversary at the chef’s counter. From the saffron butter lobster to the personalized chocolate dome, the hospitality was unforgettable.',
+          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80'
+        },
+        {
+          name: 'Nadia Al-Mansoor',
+          role: 'Regular Hearth Diner',
+          rating: 5,
+          quote: 'Even on a casual weeknight, Aurelia’s sourdough pizza and burrata starter feel extraordinary. The lighting, acoustics, and attentive staff make it our favorite escape.',
+          avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=250&q=80'
+        }
+      ];
+
+      let reviewIdx = 0;
+      const trackEl = document.getElementById('testimonialTrack');
+      const dotsEl = document.getElementById('testimonialDots');
+
+      function renderReview(index) {
+        if (!trackEl || !dotsEl) return;
+        const item = REVIEWS[index];
+        const starsHtml = Array.from({ length: item.rating }, () => '<i class="fa-solid fa-star text-amber-400 text-xs"></i>').join('');
+
+        trackEl.style.opacity = '0.2';
+        setTimeout(() => {
+          trackEl.innerHTML = `
+            <div class="w-full">
+              <div class="flex items-center gap-1 mb-4" aria-label="${item.rating} out of 5 stars">${starsHtml}</div>
+              <blockquote class="font-serif italic text-2xl sm:text-3xl text-cream-100 leading-relaxed mb-6">
+                “${item.quote}”
+              </blockquote>
+              <div class="flex items-center gap-4">
+                <img
+                  src="${item.avatar}"
+                  alt="${item.name}"
+                  onerror="this.src='https://placehold.co/120x120/1E1916/E5A93C?text=Guest'"
+                  class="w-12 h-12 rounded-full object-cover border-2 border-gold-400/50"
+                />
+                <div>
+                  <p class="font-semibold text-cream-100 text-sm sm:text-base">${item.name}</p>
+                  <p class="text-xs text-gold-400">${item.role}</p>
+                </div>
+              </div>
+            </div>
+          `;
+          trackEl.style.opacity = '1';
+        }, 160);
+
+        dotsEl.innerHTML = REVIEWS.map((_, idx) => `
+          <button
+            type="button"
+            aria-label="Go to review ${idx + 1}"
+            class="h-2.5 rounded-full transition-all cursor-pointer ${idx === index ? 'w-7 bg-gradient-to-r from-gold-400 to-ember-400' : 'w-2.5 bg-charcoal-600 hover:bg-cream-300/50'}"
+          ></button>
+        `).join('');
+
+        dotsEl.querySelectorAll('button').forEach((dotBtn, idx) => {
+          dotBtn.addEventListener('click', () => {
+            reviewIdx = idx;
+            renderReview(reviewIdx);
+          });
+        });
+      }
+
+      function nextReview() {
+        reviewIdx = (reviewIdx + 1) % REVIEWS.length;
+        renderReview(reviewIdx);
+      }
+
+      function prevReview() {
+        reviewIdx = (reviewIdx - 1 + REVIEWS.length) % REVIEWS.length;
+        renderReview(reviewIdx);
+      }
+
+      const prevReviewBtn = document.getElementById('prevReviewBtn');
+      const nextReviewBtn = document.getElementById('nextReviewBtn');
+      if (prevReviewBtn) prevReviewBtn.addEventListener('click', prevReview);
+      if (nextReviewBtn) nextReviewBtn.addEventListener('click', nextReview);
+
+      renderReview(0);
+      let sliderInterval = setInterval(nextReview, 6000);
+
+      const sliderBox = document.getElementById('testimonialSlider');
+      if (sliderBox) {
+        sliderBox.addEventListener('mouseenter', () => clearInterval(sliderInterval));
+        sliderBox.addEventListener('mouseleave', () => {
+          clearInterval(sliderInterval);
+          sliderInterval = setInterval(nextReview, 6000);
+        });
+      }
+
+      // -------------------------------------------------------------------
+      // 6. NAVBAR SCROLL STATE, MOBILE HAMBURGER & PARALLAX HERO
+      // -------------------------------------------------------------------
+      const navbar = document.getElementById('navbar');
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+      const heroParallaxBg = document.getElementById('heroParallaxBg');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function handleScroll() {
+        const y = window.scrollY || window.pageYOffset;
+        if (navbar) {
+          if (y > 40) {
+            navbar.classList.add('glass-nav-scrolled');
+            navbar.classList.remove('py-4');
+            navbar.classList.add('py-2.5');
+          } else {
+            navbar.classList.remove('glass-nav-scrolled');
+            navbar.classList.remove('py-2.5');
+            navbar.classList.add('py-4');
+          }
+        }
+
+        if (heroParallaxBg && !prefersReducedMotion && y < window.innerHeight * 1.1) {
+          heroParallaxBg.style.transform = `translate3d(0, ${y * 0.24}px, 0) scale(1.05)`;
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+
+      let menuOpen = false;
+      function toggleMobileMenu(forceState) {
+        menuOpen = typeof forceState === 'boolean' ? forceState : !menuOpen;
+        if (!mobileMenu || !mobileMenuBtn || !mobileMenuIcon) return;
+
+        mobileMenuBtn.setAttribute('aria-expanded', String(menuOpen));
+        if (menuOpen) {
+          mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+          mobileMenuIcon.classList.remove('fa-bars');
+          mobileMenuIcon.classList.add('fa-xmark');
+        } else {
+          mobileMenu.style.maxHeight = '0px';
+          mobileMenuIcon.classList.remove('fa-xmark');
+          mobileMenuIcon.classList.add('fa-bars');
+        }
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => toggleMobileMenu());
+      }
+
+      document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+        link.addEventListener('click', () => toggleMobileMenu(false));
+      });
+
+      // -------------------------------------------------------------------
+      // 7. INTERSECTION OBSERVER: SCROLL REVEAL & ANIMATED COUNTERS
+      // -------------------------------------------------------------------
+      const revealEls = document.querySelectorAll('.reveal-item');
+      let countersStarted = false;
+
+      function animateCounters() {
+        if (countersStarted) return;
+        countersStarted = true;
+
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach((counter) => {
+          const target = Number(counter.getAttribute('data-target') || 0);
+          if (prefersReducedMotion) {
+            counter.textContent = target.toLocaleString();
+            return;
+          }
+
+          const duration = 1600;
+          const startTime = performance.now();
+
+          function step(now) {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            counter.textContent = Math.floor(eased * target).toLocaleString();
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              counter.textContent = target.toLocaleString();
+            }
+          }
+          requestAnimationFrame(step);
+        });
+      }
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                if (entry.target.contains(document.getElementById('statsCounters'))) {
+                  animateCounters();
+                }
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12 }
+        );
+
+        revealEls.forEach((el) => observer.observe(el));
+
+        const statsSection = document.getElementById('statsCounters');
+        if (statsSection) {
+          const counterObs = new IntersectionObserver(
+            (entries) => {
+              if (entries.some((e) => e.isIntersecting)) {
+                animateCounters();
+                counterObs.disconnect();
+              }
+            },
+            { threshold: 0.25 }
+          );
+          counterObs.observe(statsSection);
+        }
+      } else {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+        animateCounters();
+      }
+
+      // -------------------------------------------------------------------
+      // 8. RESERVATION FORM VALIDATION & CONFIRMATION
+      // -------------------------------------------------------------------
+      const reservationForm = document.getElementById('reservationForm');
+      const reservationConfirmation = document.getElementById('reservationConfirmation');
+      const reservationSummaryText = document.getElementById('reservationSummaryText');
+      const resDateInput = document.getElementById('resDate');
+
+      // Set minimum date to today
+      if (resDateInput) {
+        const todayStr = new Date().toISOString().split('T')[0];
+        resDateInput.setAttribute('min', todayStr);
+      }
+
+      function setFieldError(inputEl, message) {
+        if (!inputEl) return;
+        const errEl = inputEl.parentElement ? inputEl.parentElement.querySelector('.error-msg') : null;
+        if (message) {
+          inputEl.classList.add('border-ember-500');
+          if (errEl) {
+            errEl.textContent = message;
+            errEl.classList.remove('hidden');
+          }
+        } else {
+          inputEl.classList.remove('border-ember-500');
+          if (errEl) {
+            errEl.textContent = '';
+            errEl.classList.add('hidden');
+          }
+        }
+      }
+
+      if (reservationForm) {
+        reservationForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const nameInput = document.getElementById('resName');
+          const emailInput = document.getElementById('resEmail');
+          const phoneInput = document.getElementById('resPhone');
+          const guestsInput = document.getElementById('resGuests');
+          const dateInput = document.getElementById('resDate');
+          const timeInput = document.getElementById('resTime');
+          const notesInput = document.getElementById('resNotes');
+
+          const nameVal = nameInput ? nameInput.value.trim() : '';
+          const emailVal = emailInput ? emailInput.value.trim() : '';
+          const phoneVal = phoneInput ? phoneInput.value.trim() : '';
+          const guestsVal = guestsInput ? guestsInput.value : '';
+          const dateVal = dateInput ? dateInput.value : '';
+          const timeVal = timeInput ? timeInput.value : '';
+          const notesVal = notesInput ? notesInput.value.trim() : '';
+
+          let isValid = true;
+
+          if (nameVal.length < 2) {
+            setFieldError(nameInput, 'Please enter your full name.');
+            isValid = false;
+          } else {
+            setFieldError(nameInput, '');
+          }
+
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(emailVal)) {
+            setFieldError(emailInput, 'Please enter a valid email address.');
+            isValid = false;
+          } else {
+            setFieldError(emailInput, '');
+          }
+
+          const digitsOnly = phoneVal.replace(/\D/g, '');
+          if (digitsOnly.length < 7) {
+            setFieldError(phoneInput, 'Please enter a valid phone number.');
+            isValid = false;
+          } else {
+            setFieldError(phoneInput, '');
+          }
+
+          if (!guestsVal) {
+            setFieldError(guestsInput, 'Please choose the number of guests.');
+            isValid = false;
+          } else {
+            setFieldError(guestsInput, '');
+          }
+
+          if (!dateVal) {
+            setFieldError(dateInput, 'Please select a reservation date.');
+            isValid = false;
+          } else {
+            setFieldError(dateInput, '');
+          }
+
+          if (!timeVal) {
+            setFieldError(timeInput, 'Please select a seating time.');
+            isValid = false;
+          } else {
+            setFieldError(timeInput, '');
+          }
+
+          if (!isValid) return;
+
+          if (reservationConfirmation && reservationSummaryText) {
+            const notesPart = notesVal ? ` Note recorded: "${notesVal}".` : '';
+            reservationSummaryText.textContent = `Thank you, ${nameVal}. We have reserved a table for ${guestsVal} on ${dateVal} at ${timeVal}. A confirmation has been prepared for ${emailVal} (${phoneVal}).${notesPart}`;
+            reservationConfirmation.classList.remove('hidden');
+            reservationConfirmation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+
+          showToast('Reservation confirmed! We look forward to hosting you.');
+          reservationForm.reset();
+        });
+      }
+
+      // -------------------------------------------------------------------
+      // 9. CONTACT FORM VALIDATION
+      // -------------------------------------------------------------------
+      const contactForm = document.getElementById('contactForm');
+      const contactSuccess = document.getElementById('contactSuccess');
+
+      if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const cName = document.getElementById('contactName');
+          const cEmail = document.getElementById('contactEmail');
+          const cMsg = document.getElementById('contactMessage');
+
+          const setCErr = (el, msg) => {
+            if (!el || !el.parentElement) return;
+            const err = el.parentElement.querySelector('.contact-err');
+            if (msg) {
+              el.classList.add('border-ember-500');
+              if (err) { err.textContent = msg; err.classList.remove('hidden'); }
+            } else {
+              el.classList.remove('border-ember-500');
+              if (err) { err.textContent = ''; err.classList.add('hidden'); }
+            }
+          };
+
+          let ok = true;
+          if (!cName || cName.value.trim().length < 2) {
+            setCErr(cName, 'Name is required.');
+            ok = false;
+          } else {
+            setCErr(cName, '');
+          }
+
+          if (!cEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cEmail.value.trim())) {
+            setCErr(cEmail, 'Valid email is required.');
+            ok = false;
+          } else {
+            setCErr(cEmail, '');
+          }
+
+          if (!cMsg || cMsg.value.trim().length < 6) {
+            setCErr(cMsg, 'Please write a brief message.');
+            ok = false;
+          } else {
+            setCErr(cMsg, '');
+          }
+
+          if (!ok) return;
+
+          if (contactSuccess) {
+            contactSuccess.textContent = `Thank you, ${cName.value.trim()}! Your message has been received by our concierge team.`;
+            contactSuccess.classList.remove('hidden');
+          }
+          showToast('Message sent to Aurelia concierge.');
+          contactForm.reset();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
